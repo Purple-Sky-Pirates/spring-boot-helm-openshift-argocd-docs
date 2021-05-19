@@ -24,9 +24,16 @@ The expectation would be that this would contain:
 
 This helm chart should be tested as working irrespective of ArgoCD/GitOps.  This helm chart should ideally be available in a Helm Chart repository.
 
+For the purposes of a demonstration the helm chart can be found at:
+https://github.com/Purple-Sky-Pirates/spring-boot-helm-openshift-argocd-charts
+
 ### Helm chart repository
 
-Initially using nexus (as per Red Hat Labs): https://github.com/redhat-cop/helm-charts/tree/master/charts/sonatype-nexus.
+It is required that a helm chart repository is available and that the desired helm chart is packaged and available in the repository.
+
+#### Nexus Setup
+
+Initially using nexus (as per Red Hat Labs): https://github.com/redhat-cop/helm-charts/tree/master/charts/sonatype-nexus
 
 https://nexus-nexus.apps.ocp1.purplesky.cloud/repository/purplesky-charts/
 
@@ -40,13 +47,14 @@ This helm chart would contain:
 
 Given that this git repository contains secret information it is expected that this git repository would be locked down and only accessible by people with appropriate permissions (ssh-private key access).
 
+Permissions need to be granted to the argocd-application-controller on order for it to seed the objects into that namespace, in this instance we are using `sb-staging` and `sb-test`, therefore we need to run the following:
 
+```
+oc policy add-role-to-user admin system:serviceaccount:stu-argocd:argocd-application-controller -n sb-staging
+oc policy add-role-to-user admin system:serviceaccount:stu-argocd:argocd-application-controller -n sb-test
+```
 
 
 ## TODOs:
 
 - Installing ArgoCD into your own namespace.
-- Granting ArgoCD permissions to your project namespaces.
-
-https://github.com/redhat-cop/helm-charts/tree/master/charts/argocd-operator
-
